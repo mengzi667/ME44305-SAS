@@ -63,9 +63,9 @@ class Vessel(sim.Component):
             self.passivate()
         if self.vessel_status >= 0:
             print(
-                    "Vessel %d assigned to Station %d"
-                    % (self.vessel_id, self.vessel_status)
-                )
+                "Vessel %d assigned to Station %d"
+                % (self.vessel_id, self.vessel_status)
+            )
             self.timeline.append((env.now(), self.vessel_status, self.demand))
             if self.flag_enter == 0:
                 self.hold(vessel_time_enter)
@@ -74,12 +74,12 @@ class Vessel(sim.Component):
                     "Vessel %d arrives at Station %d"
                     % (self.vessel_id, self.vessel_status)
                 )
-                stations[self.vessel_status].station_status=self.vessel_id
+                stations[self.vessel_status].station_status = self.vessel_id
                 stations[self.vessel_status].activate()
                 self.timeline.append((env.now(), self.vessel_status, self.demand))
                 self.passivate()
             if self.demand <= 0:
-                v_con.station_busy_flag[self.vessel_status]=0
+                v_con.station_busy_flag[self.vessel_status] = 0
                 v_con.activate()
                 self.vessel_status = -2
                 self.timeline.append((env.now(), -2, 0))
@@ -92,7 +92,7 @@ class VesselControl(sim.Component):
         super().__init__(*args, **kwargs)
         self.control_id = control_id
         self.bunkering_queue = sim.Queue(f"VConQueue")
-        self.station_busy_flag=[0 for i in range(station_num)]
+        self.station_busy_flag = [0 for i in range(station_num)]
         # 0 for empty stations, 1 for busy ones
 
     def process(self):
@@ -107,8 +107,10 @@ class VesselControl(sim.Component):
                 self.passivate()
                 continue
             if station_empty_id >= 0 and len(self.bunkering_queue) > 0:
-                print("Vessel %d is to be allocated"%self.bunkering_queue[0].vessel_id)
-                self.station_busy_flag[station_empty_id]=1
+                print(
+                    "Vessel %d is to be allocated" % self.bunkering_queue[0].vessel_id
+                )
+                self.station_busy_flag[station_empty_id] = 1
                 self.bunkering_queue[0].vessel_status = stations[
                     station_empty_id
                 ].station_id
@@ -238,7 +240,7 @@ class Converter(sim.Component):
                     stations[id].flow_from_converter = self.output_flow
                     stations[id].activate()
             self.hold(station_timestep)
-            main_storage_level-=self.input_flow
+            main_storage_level -= self.input_flow
             self.passivate()
 
 
