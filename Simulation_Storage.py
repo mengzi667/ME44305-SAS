@@ -5,6 +5,8 @@ import salabim as sim
 import numpy as np
 import random
 
+import time
+
 # import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -23,8 +25,8 @@ station_timestep = 10  # each timestep of 5 minutes for station
 station_substorage_capacity = 20  # capacity of substorage
 converter_intput_max = 10
 converter_output_max_per_station = 4
-main_storage_level = min(
-    vessel_demand * vessel_size + station_num * station_substorage_capacity, 5e4
+main_storage_level = max(
+    vessel_demand * vessel_size + station_num * station_substorage_capacity + 1e4, 5e4
 )
 main_storage_timeline = [(0, main_storage_level)]
 
@@ -40,7 +42,7 @@ class VesselGenerator(sim.Component):
             vessels.append(Vessel(self.vessel_gen))
             self.vessel_gen += 1
             self.hold(sim.Exponential(vessel_IAT_mean).sample())
-            # self.hold(vessel_IAT_mean)
+#             self.hold(vessel_IAT_mean)
 
 
 class Vessel(sim.Component):
@@ -161,7 +163,7 @@ class Station(sim.Component):
                 s_converter.station_demand_flag[self.station_id] = 1
                 s_converter.activate()
                 self.passivate()
-                self.refuel_speed_flag = self.substorage_level > 0
+                self.refuel_speed_flag = int(self.substorage_level > 0)
                 print(
                     "Station %d is working on vessel %d with Speed Flag %d, %.3f from converter"
                     % (
@@ -252,6 +254,7 @@ v_con = VesselControl()
 s_converter = Converter()
 stations = [Station(i) for i in range(station_num)]
 vessels = []
+env.random_seed(int(time.time())) # use timestamp as random seed
 env.run()
 # v_con.bunkering_queue.print_info()
 
@@ -267,6 +270,7 @@ for vessel in vessels:
 plt.grid()
 plt.xlabel("Time [s]")
 plt.ylabel("Demand")
+
 
 plt.figure(2)
 for station in stations:
