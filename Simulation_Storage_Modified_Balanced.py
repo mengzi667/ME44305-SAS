@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 vessel_IAT_mean = 2.77 * 60  # 2.77 hours of IAT
 vessel_time_enter = 0.5 * 60  # 0.5 hours of entering station
 vessel_time_leave = 0.5 * 60  # 0.5 hours of leaving station
-vessel_demand = 160  # 80 unit of demand for ammonia
-vessel_size = 10  # in total 10 vessels
+vessel_demand = 160  # 160 unit of demand for ammonia
+vessel_size = 10 * 10  # in total 10 vessels per day, simulation for 10 days
 vessel_finished = 0  # finished vessels
 station_num = 2  # number of stations
 # station_speed = [4, 6]  # low- and high-speed refueling (just for debugging)
@@ -30,7 +30,7 @@ station_substorage_capacity = 37.85  # capacity of substorage, m3
 # main_storage_level = max(
 #     vessel_demand * vessel_size + station_num * station_substorage_capacity + 1e4, 5e4
 # )
-main_storage_level = 1892
+main_storage_level = 1892 * 10  # central storage 1892 (daily refill)
 main_storage_timeline = [(0, main_storage_level)]
 
 pipe_fc = [200, 80, 120]  # m3 per hour
@@ -374,6 +374,16 @@ plt.plot(
     [main_storage_timeline[i][1] for i in range(len(main_storage_timeline))],
 )
 plt.grid()
+
+vessel_service_time = [0] * vessel_size
+for i in range(vessel_size):
+    vessel_service_time[i] = vessels[i].timeline[-1][0] - vessels[i].timeline[0][0]
+# print(vessel_service_time)
+# print(np.mean(vessel_service_time))
+plt.figure(4)
+plt.bar(range(vessel_size), vessel_service_time)
+plt.axhline(1.7 * 60 * vessel_demand / pipe_fc[1])
+plt.axhline(2.3 * 60 * vessel_demand / pipe_fc[1])
 
 plt.show()
 # print(s_converter.timeline)
