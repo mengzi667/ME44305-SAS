@@ -388,3 +388,28 @@ plt.axhline(2.3 * 60 * vessel_demand / pipe_fc[1])
 plt.show()
 # print(s_converter.timeline)
 print(main_storage_level)
+
+ideal_service_time = 60 * vessel_demand / pipe_fc[1]  # in minutes
+
+# Thresholds for service level classification
+threshold_good = 1.7 * ideal_service_time
+threshold_acceptable = 2.3 * ideal_service_time
+
+# Calculate service time per vessel
+vessel_service_time = [v.timeline[-1][0] - v.timeline[0][0] for v in vessels]
+
+# Proportions of vessels in each category
+P1 = sum(t <= threshold_good for t in vessel_service_time) / vessel_size
+P2 = sum(threshold_good < t <= threshold_acceptable for t in vessel_service_time) / vessel_size
+P3 = sum(t > threshold_acceptable for t in vessel_service_time) / vessel_size
+
+# Define weights and penalty
+w1, w2, w3 = 0.7, 0.25, 0.05
+penalty_lambda = 0.3
+
+# Compute SLI and adjusted SLI
+SLI = w1 * P1 + w2 * P2 + w3 * P3
+adjusted_SLI = SLI - penalty_lambda * P3
+
+print(f"SLI: {SLI:.3f}")
+print(f"Adjusted SLI (with penalty): {adjusted_SLI:.3f}")
