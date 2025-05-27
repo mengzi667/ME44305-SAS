@@ -493,15 +493,13 @@ P2 = sum(threshold_good < t <= threshold_acceptable for t in vessel_service_time
 P3 = sum(t > threshold_acceptable for t in vessel_service_time) / vessel_size
 
 # Define weights and penalty
-w1, w2, w3 = 0.7, 0.25, 0.05
-penalty_lambda = 0.3
+w1, w2, w3 = 10, 20, 60
 
 # Compute SLI and adjusted SLI
 SLI = w1 * P1 + w2 * P2 + w3 * P3
-adjusted_SLI = SLI - penalty_lambda * P3
 
 print(f"SLI: {SLI:.3f}")
-print(f"Adjusted SLI (with penalty): {adjusted_SLI:.3f}")
+
 
 # --- Output Total Infrastructure Construction Cost ---
 print("\n--- Infrastructure Construction Cost Estimation ---")
