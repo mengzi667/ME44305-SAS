@@ -19,12 +19,12 @@ vessel_time_leave = 0.5 * 60  # 0.5 hours of leaving station
 vessel_demand = 160  # 160 unit of demand for ammonia
 vessel_size = 10 * 10  # in total 10 vessels per day, simulation for 10 days
 vessel_finished = 0  # finished vessels
-station_num = 2  # number of stations
+station_num = 3  # number of stations
 # station_speed = [4, 6]  # low- and high-speed refueling (just for debugging)
 # station_extra_speed = 40 / 12  # the extra speed provided by substorage
 station_timestep = 5  # each timestep of 5 minutes for station, min
-station_substorage_capacity = 37.85  # capacity of substorage, m3
-# station_substorage_capacity = 0  # capacity of substorage
+# station_substorage_capacity = 37.85  # capacity of substorage, m3
+station_substorage_capacity = 0  # capacity of substorage
 # converter_intput_max = 200 / 12
 # converter_output_max_per_station = 80 / 12
 # main_storage_level = max(
@@ -42,7 +42,7 @@ station_output_max = pipe_fc[2] * station_timestep / 60
 
 # --- New Infrastructure Cost Calculation Section ---
 # Constant definitions
-AMMONIA_DENSITY_TON_PER_M3 = 0.61  # Approximately 0.61 tons/m3
+AMMONIA_DENSITY_TON_PER_M3 = 0.682  # Approximately 0.61 tons/m3
 GALLONS_PER_M3 = 264.172  # 1 m3 approximately equals 264.172 US liquid gallons
 
 # Tank cost regression formula: y = 1.41x + 329.72 (y in USD, x in gallons) [cite: 217]
