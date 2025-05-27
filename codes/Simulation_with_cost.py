@@ -72,20 +72,18 @@ def calculate_infrastructure_cost(
 ):
     """
     Calculates the total infrastructure construction cost (tanks and pipes).
+    Central storage tank uses a fixed cost of $1,750,000.
+    Sub-storage tanks (if any) use the linear regression formula: y = 1.41x + 329.72 (y in USD, x in gallons).
     """
     total_tank_cost = 0
     total_pipe_cost = 0
 
-    # 1. Calculate Central Storage Tank Cost
-    # As per verification section 8.1, main_storage_level / 10 (1892 units) is a daily refill baseline.
-    # The total capacity of main storage is 1892 * 10 = 18920 units (m3).
-    # This total capacity is approximately 5,000,000 gallons. [cite: 261, 263]
-    # We are using the same tank cost formula for all tanks, acknowledging its limitation for large capacities.
-    central_storage_capacity_gallons = main_storage_capacity_m3 * GALLONS_PER_M3
-    central_tank_cost = TANK_COST_SLOPE * central_storage_capacity_gallons + TANK_COST_INTERCEPT
+    # 1. Calculate Central Storage Tank Cost (Fixed Cost)
+    central_tank_cost = 1750000  # Fixed cost for central storage tank
     total_tank_cost += central_tank_cost
+    central_storage_capacity_gallons = main_storage_capacity_m3 * GALLONS_PER_M3
     print(f"Central Storage Capacity: {main_storage_capacity_m3:.2f} m3 ({central_storage_capacity_gallons:.2f} gallons)")
-    print(f"Central Storage Tank Cost: ${central_tank_cost:.2f}")
+    print(f"Central Storage Tank Cost (Fixed): ${central_tank_cost:.2f}")
 
     # 2. Calculate Sub-Storage Tank Cost (if any)
     if substorage_capacity_m3 > 0:
@@ -129,7 +127,6 @@ def calculate_infrastructure_cost(
 
     total_infrastructure_cost = total_tank_cost + total_pipe_cost
     return total_infrastructure_cost
-# --- End of Cost Calculation Section ---
 
 
 class VesselGenerator(sim.Component):
