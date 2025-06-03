@@ -19,11 +19,6 @@ station_num = 2  # number of stations
 station_timestep = 5  # each timestep of 5 minutes for station, min
 # station_substorage_capacity = 37.85  # capacity of substorage, m3
 station_substorage_capacity = 0  # capacity of substorage
-# converter_intput_max = 200 / 12
-# converter_output_max_per_station = 80 / 12
-# main_storage_level = max(
-#     vessel_demand * vessel_size + station_num * station_substorage_capacity + 1e4, 5e4
-# )
 main_storage_level = 1892 * 10  # central storage 18920 m3
 main_storage_timeline = [(0, main_storage_level)]
 
